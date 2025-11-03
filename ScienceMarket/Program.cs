@@ -1,6 +1,191 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Localization;
+using NETCore.MailKit.Extensions;
+using NETCore.MailKit.Infrastructure.Internal;
+using System.Data;
+using System.Data.Common;
+using System.Security.Claims;
+using Microsoft.EntityFrameworkCore;
+using ScienceMarketData;
+
+
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllersWithViews();
+
+builder
+    .Services
+    .AddMvc()
+    .AddViewLocalization();
+
+
+builder.Services.AddDbContext<ScienceMarketDbContext>(config =>
+{
+    AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+    config.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"), p =>
+    {
+        p.MigrationsAssembly("ScienceMarketMigration");
+    });
+});
+
+builder.Services.AddIdentity<User, Role>(config =>
+{
+    config.Password.RequireDigit = builder.Configuration.GetValue<bool>("Identity:RequireDigit");
+    config.Password.RequireLowercase = builder.Configuration.GetValue<bool>("Identity:RequireLowercase");
+    config.Password.RequireUppercase = builder.Configuration.GetValue<bool>("Identity:RequireUppercase");
+    config.Password.RequireNonAlphanumeric = builder.Configuration.GetValue<bool>("Identity:RequireNonAlphanumeric");
+    config.Password.RequiredLength = builder.Configuration.GetValue<int>("Identity:RequiredLength");
+    config.Password.RequiredUniqueChars = builder.Configuration.GetValue<int>("Identity:RequiredUniqueChars");
+
+    config.User.RequireUniqueEmail = true;
+    config.Lockout.MaxFailedAccessAttempts = 5;
+    config.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+
+    config.SignIn.RequireConfirmedEmail = true;
+}).AddEntityFrameworkStores<ScienceMarketDbContext>()
+.AddDefaultTokenProviders();//mail doðrulama veya þifre yenileme iþleminde kullanýcýya gönderilen token üretir
+
+builder
+    .Services
+    .AddMailKit(config =>
+    {
+        config.UseMailKit(new MailKitOptions
+        {
+            Server = builder.Configuration["Email:Server"],
+            Port = builder.Configuration.GetValue<int>("Email:Port"),
+            SenderName = builder.Configuration["Email:SenderName"],
+            SenderEmail = builder.Configuration["Email:SenderEmail"],
+            Account = builder.Configuration["Email:Account"],
+            Password = builder.Configuration["Email:Password"],
+            Security = builder.Configuration.GetValue<bool>("Email:Security")
+        });
+    });
+
+
 var app = builder.Build();
 
-app.MapGet("/", () => "Hello World!");
+app.UseStaticFiles();//wwwroot dosyasýný kullanabilmek için
+app.UseAuthentication();
+app.UseAuthorization();
+
+var supportedCultures = new[] { "en", "tr" };
+
+app.UseRequestLocalization(config =>
+{
+    config.DefaultRequestCulture = new RequestCulture(supportedCultures[0]);//Varsayýlan dil Ýngilizce ("en") olarak ayarlanýyor.örneðin almanca browserdan açýlýrsa ing
+    config.AddSupportedCultures(supportedCultures);//uygulamanýn destekleyeceði veri biçimlendirme kültürlerini belirtir (tarih, sayý, para birimi formatý vs.).
+    config.AddSupportedUICultures(supportedCultures);//Uygulamanýn destekleyeceði kullanýcý arayüzü kültürlerini belirtir (çeviri, metin vs.).
+});
+
+
+
+
+app.MapControllerRoute( //SEO uyumlu rota tanýmlamasý
+    name: "Catalog",
+    pattern: "{name}/-catalog-/{id}",
+    defaults: new { controller = "Home", action = "Catalog" }
+    );
+app.MapControllerRoute(
+    name: "Category",
+    pattern: "{name}-category-{id}",
+    defaults: new { controller = "Home", action = "Category" }
+    );
+app.MapControllerRoute(
+    name: "Brand",
+    pattern: "{name}-brand-{id}",
+    defaults: new { controller = "Home", action = "Brand" }
+    );
+
+app.MapControllerRoute(
+    name: "Product",
+    pattern: "{name}-product-{id}",
+    defaults: new { controller = "Home", action = "Detail" }
+    );
+
+app.MapControllerRoute(
+    name: "Areas",
+    pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");
+
+app.MapControllerRoute(//default rota hep en sonda olsun. herþeye uyduðu için her zaman çalýþýr ve diðer alanlara inilmez
+    name: "Default",
+    pattern: "{controller=Home}/{action=Index}/{id?}");
+
+
+
+using var scope = app.Services.CreateScope();
+using var dbContext = scope.ServiceProvider.GetRequiredService<ScienceMarketDbContext>();
+using var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<Role>>();
+using var userManager = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
+
+
+dbContext.Database.Migrate();
+
+new[]
+{
+    new Role {DisplayName="Yöneticiler", Name="Administrators"},
+    new Role {DisplayName="Ürün Yöneticileri", Name="ProductAdministrators"},
+    new Role {DisplayName="Sipariþ Yöneticileri", Name="OrderAdministrators"},
+    new Role {DisplayName="Üyeler", Name="Members"}
+}.ToList()
+.ForEach(p =>
+{
+    roleManager.CreateAsync(p).Wait();
+});
+
+var user = new User
+{
+    Date = DateTime.UtcNow,
+    Gender = Genders.Male,
+    GivenName = "Builtin Admin",
+    UserName = "admin@mvc.com",
+    Email = "admin@mvc.com",
+    EmailConfirmed = true
+};
+if (userManager.FindByNameAsync("admin@mvc.com").Result is null)
+{
+    userManager.CreateAsync(user, "Mvcadmin1?").Wait();
+    userManager.AddToRoleAsync(user, "Administrators").Wait();
+    userManager.AddClaimAsync(user, new Claim(ClaimTypes.GivenName, user.GivenName)).Wait();
+}
+
+#if DEBUG
+
+{
+    var productAdmin = new User
+    {
+        Date = DateTime.UtcNow,
+        Gender = Genders.Male,
+        GivenName = "Product Admin",
+        UserName = "padmin@mvc.com",
+        Email = "padmin@mvc.com",
+        EmailConfirmed = true,
+    };
+    if (userManager.FindByNameAsync("padmin@mvc.com").Result is null)
+    {
+        userManager.CreateAsync(productAdmin, "Productadmin1?").Wait();
+        userManager.AddToRoleAsync(productAdmin, "ProductAdministrators").Wait();
+        userManager.AddClaimAsync(productAdmin, new Claim(ClaimTypes.GivenName, productAdmin.GivenName)).Wait();
+    }
+}
+
+
+{
+    var orderAdmin = new User
+    {
+        Date = DateTime.UtcNow,
+        Gender = Genders.Male,
+        GivenName = "Order Admin",
+        UserName = "oadmin@mvc.com",
+        Email = "oadmin@mvc.com",
+        EmailConfirmed = true,
+    };
+    if (userManager.FindByNameAsync("oadmin@mvc.com").Result is null)
+    {
+        userManager.CreateAsync(orderAdmin, "Orderadmin1?").Wait();
+        userManager.AddToRoleAsync(orderAdmin, "OrderAdministrators").Wait();
+        userManager.AddClaimAsync(orderAdmin, new Claim(ClaimTypes.GivenName, orderAdmin.GivenName)).Wait();
+    }
+}
+
+#endif
 
 app.Run();

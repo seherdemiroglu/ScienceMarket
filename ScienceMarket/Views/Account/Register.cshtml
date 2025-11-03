@@ -1,0 +1,91 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Yeni üyelik";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+
+</head>
+<body data-bs-theme="light">
+    <div class="container">
+        <div class="vh-100 d-flex align-items-center justify-content-center">
+            <div class="container my-5">
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <div class="card shadow-sm">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0 text-center">Kayıt Ol</h4>
+                            </div>
+                            <div class="card-body">
+                                <form asp-action="Register" asp-controller="Account" method="post">
+                                    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                                    <!-- E-Posta -->
+                                    <div class="mb-3">
+                                        <label asp-for="Username" class="form-label"></label>
+                                        <input asp-for="Username" class="form-control" placeholder="ornek@eposta.com" />
+                                        <span asp-validation-for="Username" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Ad Soyad -->
+                                    <div class="mb-3">
+                                        <label asp-for="GivenName" class="form-label"></label>
+                                        <input asp-for="GivenName" class="form-control" placeholder="Ad Soyad" />
+                                        <span asp-validation-for="GivenName" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Cinsiyet -->
+                                    <div class="mb-3">
+                                        <label asp-for="Gender" class="form-label"></label>
+                                        <select asp-for="Gender" class="form-select"
+                                                asp-items="Html.GetEnumSelectList<Genders>()">
+                                            <option value="">Seçiniz</option>
+                                        </select>
+                                        <span asp-validation-for="Gender" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Parola -->
+                                    <div class="mb-3">
+                                        <label asp-for="Password" class="form-label"></label>
+                                        <input asp-for="Password" class="form-control" />
+                                        <span asp-validation-for="Password" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Parola Tekrar -->
+                                    <div class="mb-3">
+                                        <label asp-for="PasswordCheck" class="form-label"></label>
+                                        <input asp-for="PasswordCheck" class="form-control" />
+                                        <span asp-validation-for="PasswordCheck" class="text-danger"></span>
+                                    </div>
+
+                                    <!-- Gönder -->
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-warning">Kayıt Ol</button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-footer text-center">
+                                <small>Zaten hesabınız var mı? <a href="/Account/Login">Giriş yap</a></small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/lib/jquery/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery-validate/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+</html>
+

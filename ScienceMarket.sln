@@ -1,9 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.13.35913.81 d17.13
+VisualStudioVersion = 17.13.35913.81
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceMarket", "ScienceMarket\ScienceMarket.csproj", "{C0567309-69C7-413D-8CB4-4C3D476DA9CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceMarketData", "ScienceMarketData\ScienceMarketData.csproj", "{C74DA6E7-49A4-4D46-A17A-FF9E129256D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScienceMarketMigration", "ScienceMarketMigration\ScienceMarketMigration.csproj", "{3384469D-8572-4D23-B24C-4F7D99E518DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{C0567309-69C7-413D-8CB4-4C3D476DA9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C0567309-69C7-413D-8CB4-4C3D476DA9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C0567309-69C7-413D-8CB4-4C3D476DA9CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C74DA6E7-49A4-4D46-A17A-FF9E129256D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C74DA6E7-49A4-4D46-A17A-FF9E129256D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C74DA6E7-49A4-4D46-A17A-FF9E129256D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C74DA6E7-49A4-4D46-A17A-FF9E129256D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3384469D-8572-4D23-B24C-4F7D99E518DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3384469D-8572-4D23-B24C-4F7D99E518DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3384469D-8572-4D23-B24C-4F7D99E518DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3384469D-8572-4D23-B24C-4F7D99E518DA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
