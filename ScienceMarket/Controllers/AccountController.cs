@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using NETCore.MailKit.Core;
 using ScienceMarket.Models;
@@ -70,7 +71,7 @@ public class AccountController(UserManager<User> userManager, SignInManager<User
             var link = Url.Action("EmailConfirmation", "Account", new { id = user.Id, token }, Request.Scheme);
 
             var body = $@"<h4>merhabalar sn {user.GivenName}</h4><p>...</p><a href=""{link}"">Link</a>";
-            await emailService.SendAsync(user.Email, "MvcForum EPosta Doğrulama Mesajı", body, true);
+            await emailService.SendAsync(user.Email, "Science Market EPosta Doğrulama Mesajı", body, true);
 
             return View("RegisterSuccess");
         }
@@ -92,5 +93,47 @@ public class AccountController(UserManager<User> userManager, SignInManager<User
             return RedirectToAction("Index", "Home");
         }
         return View();
+    }
+
+    [Authorize]
+    public async Task<IActionResult> Logout()
+    {
+        await signInManager.SignOutAsync();
+        return RedirectToAction("Index", "Home");
+    }
+
+    public IActionResult ForgotPassword()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> ForgotPasswordAsync(ForgotPasswordViewModel model)
+    {
+        var user = await userManager.FindByNameAsync(model.UserName!);
+        if (user == null)
+        {
+            ModelState.AddModelError("", "Kullanıcı bulunamıyor");
+            return View(model);
+        }
+        var token = await userManager.GeneratePasswordResetTokenAsync(user);
+        var link = Url.Action("SetPassword", "Account", new { id = user.Id, token }, Request.Scheme);
+
+        var body = $@"<h4>merhabalar sn {user.GivenName}</h4><p>...</p><a href=""{link}"">Link</a>";
+        await emailService.SendAsync(user.Email, "Science Market Parola Yenileme Mesajı", body, true);
+        return View("ForgotPasswordSuccess");
+    }
+    public IActionResult SetPassword(Guid id, string token)
+    {
+
+        return View(new SetPasswordViewModel { Id = id, Token = token });
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> SetPassword(SetPasswordViewModel model)
+    {
+        var user = await userManager.FindByIdAsync(model.Id.ToString()!);
+        var result = await userManager.ResetPasswordAsync(user!, model.Token!, model.Password!);
+        return View("SetPasswordSuccess");
     }
 }
