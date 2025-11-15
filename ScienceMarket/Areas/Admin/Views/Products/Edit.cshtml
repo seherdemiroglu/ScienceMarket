@@ -2,7 +2,7 @@
 
 @inject ScienceMarketDbContext dbContext
 @{
-    ViewData["Title"] = "Ürün Ekle";
+    ViewData["Title"] = "Ürün Düzenle";
     var categories = dbContext.Categories.OrderBy(p => p.Name).ToList();
     var specs = dbContext.Specifications.OrderBy(p => p.Name).ToList();
     var categoySelectList = new SelectList(categories.Select(p => new { p.Id, p.Name }), "Id", "Name");
@@ -64,7 +64,7 @@
         <input class="form-control" asp-for="Name" placeholder="ürün adını yazınız..." />
         <span class="text-danger" asp-validation-for="Name"></span>
     </div>
-    
+
     <div class="mb-3">
         <label class="form-label" asp-for="Price"></label>
         <input class="form-control" asp-for="Price" placeholder="ürün adını yazınız..." />
@@ -74,7 +74,7 @@
         <label class="form-label" asp-for="Description"></label>
         <textarea class="form-control" asp-for="Description" placeholder="ürün özelliklerini yazınız..."></textarea>
     </div>
-    
+
     <div class="mb-3">
         <div class="d-flex mb-3">
             <div class="border p-2">
