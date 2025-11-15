@@ -1,0 +1,9 @@
+﻿@model Product
+
+@inject ScienceMarketDbContext dbContext
+@{
+    ViewData["Title"] = "Ürün Ekle";
+    var categories = dbContext.Categories.OrderBy(p => p.Name).ToList();
+    var catalogs = dbContext.Catalogs.OrderBy(p => p.Name).ToList();
+    var brands = dbContext.Brands.OrderBy(p => p.Name).ToList();
+}

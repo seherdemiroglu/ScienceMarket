@@ -1,0 +1,124 @@
+﻿@model List<Category>
+@{
+    ViewData["Title"] = "Özellik";
+}
+
+
+<div class="p-3 d-flex justify-content-end">
+    <a asp-action="Create" class="btn btn-primary">
+        <i class="fa fa-plus" aria-hidden="true"></i>
+        Yeni
+    </a>
+</div>
+
+<div class="accordion" id="accordionExample">
+    @foreach (var category in Model)
+    {
+        <div class="card bg-dark text-light border-secondary">
+            <div class="card-header bg-secondary text-light">
+                <h2 class="mb-0">
+                    <button class="btn text-light btn-block text-left w-100"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#collapse_@category.Id"
+                            aria-expanded="false">
+                        @category.Name
+                        <span class="badge bg-primary">@category.Specifications.Count</span>
+                    </button>
+                </h2>
+            </div>
+
+            <div id="collapse_@category.Id"
+                 class="collapse"
+                 data-bs-parent="#accordionExample">
+
+                <div class="card-body bg-dark text-light">
+
+                    <table class="table table-bordered table-striped table-dark">
+                        <colgroup>
+                            <col />
+                            <col />
+                            <col />
+                            <col width="200" />
+                        </colgroup>
+
+                        <thead class="bg-secondary text-light">
+                            <tr>
+                                <th>
+                                    <div class="d-flex align-items-center">
+                                        <img src="https://flagsapi.com/TR/flat/24.png" class="mr-2">
+                                        Ad
+                                    </div>
+                                </th>
+                                
+                                <th>Aktif</th>
+                                <th>İşlemler</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var item in category.Specifications)
+                            {
+                                <tr>
+                                    <td class="text-light">@item.Name</td>
+                                
+                                    <td>
+                                        @if (item.IsEnabled)
+                                        {
+                                            <i class="fa fa-check text-success"></i>
+                                        }
+                                        else
+                                        {
+                                            <i class="fa fa-times text-danger"></i>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div class="d-flex justify-content-center">
+                                            <a asp-controller="Specs" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning mr-2">
+                                                Düzenle
+                                            </a>
+                                            <a asp-controller="Specs" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger remove-btn">
+                                                Sil
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+
+
+
+
+
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        $(() => {
+            $('.remove-btn').on('click', (e) => {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Uyarı!',
+                    html: 'Bu kayıt tamamen silinecektir. Devam etmek istiyor musunuz?',
+                    showCancelButton: true,
+                    cancelButtonText: 'İptal',
+                    confirmButtonText: 'Sil',
+                })
+                    .then((result) => {
+                        if (result.isConfirmed)
+                            window.location = $(e.currentTarget).attr('href');
+                    });
+                return false;
+            });
+        });
+    </script>
+}

@@ -5,7 +5,7 @@ namespace ScienceMarket.Areas.Admin.Controllers;
 
 [Area("Admin")]
 [Authorize(Roles = "Administrators")]
-public class DashboardController : Controller
+public class ProductsController : Controller
 {
     public IActionResult Index()
     {
