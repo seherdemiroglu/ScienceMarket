@@ -1,4 +1,13 @@
 ﻿
+@inject ScienceMarketDbContext dbContext
+@{
+    ViewData["Title"] = "Welcome";
+    var products = dbContext.Products.ToList();
+}
 
 <h1>Hoş geldiniz!</h1>
 <p>Burası örnek içerik alanıdır.</p>
+
+<section class="mb-3">
+    <partial name="_ProductsPartial" model="products" />
+</section>

@@ -1,4 +1,10 @@
 ﻿@inject ScienceMarketDbContext dbContext
+@{ 
+    var catalogs = dbContext.Catalogs.Where(p => p.IsEnabled && p.Products.Any(q => q.IsEnabled)).OrderBy(p => p.Name).ToList();
+    var categories = dbContext.Categories.Where(p => p.IsEnabled && p.Products.Any(q => q.IsEnabled)).OrderBy(p => p.Name).ToList();
+
+    var brands = dbContext.Brands.Where(p => p.IsEnabled && p.Products.Any(q => q.IsEnabled)).OrderBy(p => p.Name).ToList();
+}
 
 
 <!DOCTYPE html>
@@ -26,10 +32,70 @@
             <div class="collapse navbar-collapse" id="navbarMain">
                 <!-- Sol menü -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item"><a class="nav-link active" href="/">Ana Sayfa</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Products">Ürünler</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/About">Hakkımızda</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/Contact">İletişim</a></li>
+                    <li class="nav-item"><a class="nav-link active" asp-controller="Home" asp-action="Index">HOME</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            CATEGORIES
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            @foreach (var category in categories)
+                            {
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-route="Category"
+                                       asp-route-name="@category.Name.ToSafeUrlString()"
+                                       asp-route-id="@category.Id">
+                                        @category.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            CATALOGS
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            @foreach (var catalog in catalogs)
+                            {
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-route="Catalog"
+                                       asp-route-name="@catalog.Name.ToSafeUrlString()"
+                                       asp-route-id="@catalog.Id">
+                                        @catalog.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button"
+                           data-bs-toggle="dropdown" aria-expanded="false">
+                            Brands
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            @foreach (var brand in brands)
+                            {
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-route="Brands"
+                                       asp-route-name="@brand.Name.ToSafeUrlString()"
+                                       asp-route-id="@brand.Id">
+                                        @brand.Name
+                                    </a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Home" asp-action="Brand">Brands</a></li>
+
                 </ul>
 
                 <!-- Sağ taraf -->
@@ -38,10 +104,18 @@
                     @if (User.Identity.IsAuthenticated)
                     {
 
-                        //var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
-                        //var shoppingCartItems = dbContext.ShoppingCartItems.Where(p => p.UserId == userId).Sum(p => p.Quantity);
+                        var userId = Guid.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+                        var shoppingCartItems = dbContext.ShoppingCartItems.Where(p => p.UserId == userId).Sum(p => p.Quantity);
 
                         <a class="btn btn-outline-light me-2">@User.FindFirst(ClaimTypes.GivenName)!.Value</a>
+                        <a class="btn btn-outline-light me-2 position-relative">
+                            Shopping Cart
+
+                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-primary">
+                                @(shoppingCartItems > 99 ? "99+" : shoppingCartItems)
+                            </span>
+                        </a>
+                        
                         <a class="btn btn-outline-light me-2" asp-action="Logout" asp-controller="Account">Çıkış Yap</a>
                     }
                     else

@@ -1,0 +1,11 @@
+﻿@model Category
+
+@{
+
+    ViewData["Title"] = Model.Name;
+
+    var products = Model.Products.ToList();
+}
+
+<div class="display-6">@Model.Name</div>
+<partial name="_ProductsPartial" model="products" />

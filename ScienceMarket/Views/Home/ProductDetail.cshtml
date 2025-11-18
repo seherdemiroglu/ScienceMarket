@@ -1,0 +1,113 @@
+﻿
+@model Product
+@inject ScienceMarketDbContext dbContext
+
+@{
+    ViewData["Title"] = Model.Name;
+
+    var avg = 0.0;
+
+    // Image list creation
+    List<string> images = new List<string>();
+    images.Add(Url.Action("Product", "Images", new { id = Model.Id }));
+    images.AddRange(Model.ProductImages.Select(p =>
+        Url.Action("ProductImage", "Images", new { id = p.Id })
+    ));
+}
+
+<div class="container mt-4">
+
+    <div class="row">
+
+        <!-- LEFT: IMAGES -->
+        <div class="col-md-5">
+
+            <!-- Main Image -->
+            <img src="@images.First()" class="img-fluid rounded shadow mb-3" />
+
+            <!-- Carousel for additional images -->
+            @if (images.Count > 1)
+            {
+                <div id="productCarousel" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+
+                        @for (int i = 0; i < images.Count; i++)
+                        {
+                            <div class="carousel-item @(i == 0 ? "active" : "")">
+                                <img src="@images[i]" class="d-block w-100 rounded" />
+                            </div>
+                        }
+
+                    </div>
+
+                    <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon"></span>
+                    </a>
+
+                    <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon"></span>
+                    </a>
+                </div>
+            }
+        </div>
+
+
+
+
+        <!-- RIGHT: PRODUCT INFO -->
+        <div class="col-md-7">
+
+            <h2 class="fw-bold">@Model.Name</h2>
+
+            <p class="text-muted mb-1">
+                <strong>Marka:</strong> @Model.Brand?.Name
+            </p>
+
+            <h3 class="text-success fw-bold mb-3">
+                @Model.Price.ToString("C0", new System.Globalization.CultureInfo("tr-TR"))
+            </h3>
+
+            <p class="mb-4">
+                @Model.Description
+            </p>
+
+            <button class="btn btn-primary btn-lg mb-4">
+                <i class="fa fa-cart-plus"></i> Add to Cart
+            </button>
+
+
+            <!-- SPECIFICATIONS TABLE -->
+            <h4 class="mt-4">Specifications</h4>
+
+            @if (Model.Specs != null && Model.Specs.Any())
+            {
+                <table class="table table-bordered table-striped mt-2">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th width="250">Specification</th>
+                            <th>Value</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var spec in Model.Specs)
+                        {
+                            <tr>
+                                <td>@spec.Specification?.Name</td>
+                                <td>@spec.Value</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-muted">Bu ürüne ait özellik bulunmuyor.</p>
+            }
+
+        </div>
+    </div>
+
+</div>
+
+
