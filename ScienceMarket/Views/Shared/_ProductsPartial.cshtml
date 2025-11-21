@@ -33,9 +33,12 @@
                                 Detail
                             </a>
 
-                            <button class="btn btn-primary add-to-cart-btn">
+                            <a class="btn btn-primary add-to-cart-btn"
+                               asp-controller="Account"
+                               asp-action="AddToCart"
+                               asp-route-id="@product.Id">
                                 Add to Cart
-                            </button>
+                            </a>
 
                         </div>
 

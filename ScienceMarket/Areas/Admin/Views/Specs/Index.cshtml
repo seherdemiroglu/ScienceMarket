@@ -1,13 +1,13 @@
 ﻿@model List<Category>
 @{
-    ViewData["Title"] = "Özellik";
+    ViewData["Title"] = "Specification";
 }
 
 
 <div class="p-3 d-flex justify-content-end">
     <a asp-action="Create" class="btn btn-primary">
         <i class="fa fa-plus" aria-hidden="true"></i>
-        Yeni
+        Add New Specification
     </a>
 </div>
 
@@ -47,12 +47,12 @@
                                 <th>
                                     <div class="d-flex align-items-center">
                                         <img src="https://flagsapi.com/TR/flat/24.png" class="mr-2">
-                                        Ad
+                                        Name
                                     </div>
                                 </th>
                                 
-                                <th>Aktif</th>
-                                <th>İşlemler</th>
+                                <th>Aktive</th>
+                                <th>Actions</th>
                             </tr>
                         </thead>
 
@@ -75,10 +75,10 @@
                                     <td>
                                         <div class="d-flex justify-content-center">
                                             <a asp-controller="Specs" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning mr-2">
-                                                Düzenle
+                                                Edit
                                             </a>
                                             <a asp-controller="Specs" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger remove-btn">
-                                                Sil
+                                                Delete
                                             </a>
                                         </div>
                                     </td>

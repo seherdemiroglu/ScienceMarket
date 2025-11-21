@@ -1,24 +1,23 @@
 ﻿
 @model ScienceMarketData.Catalog
 @{
-    ViewData["Title"] = "Katalog Ekle";
+    ViewData["Title"] = "Add Catalog";
 }
 
 
 <form method="post" enctype="multipart/form-data" class="p-4 shadow rounded bg-dark">
-    <h4 class="mb-3">Katalog Ekle</h4>
+    <h4 class="mb-3">Add Catalog</h4>
     <hr />
 
-    <!-- Ad -->
     <div class="mb-3">
         <label asp-for="Name" class="form-label fw-bold"></label>
-        <input asp-for="Name" class="form-control" placeholder="Katalog adını giriniz" />
+        <input asp-for="Name" class="form-control" placeholder="Enter the catalog name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
 
 
-    <!-- Aktif mi -->
+    
     <div class="form-check form-switch mb-3">
         <input asp-for="IsEnabled" class="form-check-input" type="checkbox" role="switch" />
         <label asp-for="IsEnabled" class="form-check-label"></label>
@@ -26,11 +25,10 @@
 
 
 
-    <!-- Kaydet Butonu -->
     <div class="d-flex justify-content-end">
-        <a class="btn btn-link" asp-action="Index">İptal</a>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
         <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save me-1"></i> Kaydet
+            <i class="bi bi-save me-1"></i> Save
         </button>
     </div>
 </form>

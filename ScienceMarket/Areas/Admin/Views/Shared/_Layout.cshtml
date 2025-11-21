@@ -32,15 +32,25 @@
         <nav id="sidebar" class="sidebar">
             <div class="brand">ScienceMarket • Admin</div>
             <div class="p-2">
-                <a asp-controller="Dashboard" asp-action="Index">📊 Gösterge Paneli</a>
-                <a asp-controller="Categories" asp-action="Index">🗂️ Kategoriler</a>
-                <a asp-controller="Catalogs" asp-action="Index">🗂️ Kataloglar</a>
-                <a asp-controller="Brands" asp-action="Index">🗂️ Markalar</a>
-                <a asp-controller="Specs" asp-action="Index">📦 Özellikler</a>
-                <a asp-controller="Products" asp-action="Index">📦 Ürünler</a>
-                <a href="#">🧾 Siparişler</a>
+                <a asp-controller="Dashboard" asp-action="Index">📊 Dashboard</a>
+                <a asp-controller="Categories" asp-action="Index">🗂️ Categories</a>
+                <a asp-controller="Catalogs" asp-action="Index">🗂️ Catalogs</a>
+                <a asp-controller="Brands" asp-action="Index">🗂️ Brands</a>
+                <a asp-controller="Specs" asp-action="Index">📦 Specifications</a>
+                <a asp-controller="Products" asp-action="Index">📦 Products</a>
+                <a class="d-flex justify-content-between align-items-center"
+                   data-bs-toggle="collapse" href="#ordersMenu" role="button">
+                    🧾 Orders
+                    <span class="ms-2">▼</span>
+                </a>
+
+                <div class="collapse ms-3 mt-2" id="ordersMenu">
+                    <a asp-controller="Orders" asp-action="Index" class="d-block mb-1">🟢 New</a>
+                    <a asp-controller="Orders" asp-action="InProgress" class="d-block mb-1">🔵 In Progress</a>
+                    <a asp-controller="Orders" asp-action="Shipped" class="d-block">⚪ Shipped</a>
+                </div>
                 <hr class="border-secondary opacity-25">
-                <a asp-area="" asp-controller="Home" asp-action="Index">↩️ Siteye Dön</a>
+                <a asp-area="" asp-controller="Home" asp-action="Index">↩️ Return to site</a>
             </div>
         </nav>
 
@@ -49,7 +59,7 @@
                 <div class="container-fluid py-2 d-flex align-items-center justify-content-between">
                     <div class="d-flex align-items-center gap-2">
                         <button class="btn btn-outline-light d-lg-none" id="sidebarToggle">☰</button>
-                        <h6 class="m-0 fw-bold">Gösterge Paneli</h6>
+                        <h6 class="m-0 fw-bold">Dashboard</h6>
                     </div>
                 </div>
             </div>

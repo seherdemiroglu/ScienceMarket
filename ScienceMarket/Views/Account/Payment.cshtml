@@ -1,0 +1,246 @@
+﻿@model PaymentViewModel
+@inject ScienceMarketDbContext dbContext
+@{
+    var provinces = dbContext.Provinces.ToList();
+}
+
+<h3 class="fw-bold mb-4">Payment</h3>
+
+<div ng-app="paymentApp" ng-controller="ctrl" ng-init="init()">
+
+    <div class="row g-4">
+
+        <div class="col-lg-6" ng-show="page == 'address'">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white d-flex align-items-center py-3 border-0">
+                    <h5 class="m-0 fw-semibold">Shipping Address</h5>
+                    <button class="btn btn-primary btn-sm ms-auto"
+                            ng-disabled="selectedAddress == null"
+                            ng-click="page = 'creditCard'">
+                        Next <i class="bi bi-arrow-right ms-1"></i>
+                    </button>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="list-group mb-3">
+                        <div class="list-group-item list-group-item-action d-flex align-items-center py-3"
+                             ng-repeat="address in userAddresses"
+                             ng-class="{'active border-primary': selectedAddress == address}"
+                             style="cursor: pointer;"
+                             ng-click="setAddress(address)">
+
+                            <div class="me-3">
+                                <i class="bi bi-check-circle-fill text-success fs-5"
+                                   ng-show="selectedAddress == address"></i>
+                            </div>
+
+                            <div>
+                                <div class="fw-bold">{{address.name}}</div>
+                                <div class="text-muted small">{{address.text}}</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="text-center text-muted fw-semibold my-3">
+                        — OR ADD NEW ADDRESS —
+                    </div>
+
+                   
+                    <div class="row g-3">
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Name</label>
+                            <input class="form-control form-control-lg" ng-model="address.name" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Address</label>
+                            <textarea class="form-control form-control-lg" ng-model="address.text"></textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Zip Code</label>
+                            <input class="form-control form-control-lg" ng-model="address.zipCode" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Province</label>
+                            <select class="form-select form-select-lg"
+                                    ng-model="selectedProvinceId"
+                                    ng-change="fetchCities()">
+                                <option value="">Choose...</option>
+                                @foreach (var province in provinces)
+                                {
+                                    <option value="@province.Id">@province.Name</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">City</label>
+                            <select class="form-select form-select-lg"
+                                    ng-model="address.cityId"
+                                    ng-options="city.id as city.name for city in cities track by city.id">
+                                <option value="">Choose...</option>
+                            </select>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <button class="btn btn-success btn-lg w-100" ng-click="saveAddress()">
+                                Save Address
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6" ng-show="page == 'creditCard'">
+
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 border-0">
+                    <h5 class="m-0 fw-semibold">Credit Card</h5>
+                </div>
+
+                <div class="card-body">
+
+                    <div class="row g-3">
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Card Number</label>
+                            <input class="form-control form-control-lg" ng-model="creditCard.cardNumber" placeholder="xxxx xxxx xxxx xxxx" />
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">Card Holder Name</label>
+                            <input class="form-control form-control-lg" ng-model="creditCard.cardHolderName" />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Expire Month</label>
+                            <select class="form-select form-select-lg" ng-model="creditCard.expireMonth">
+                                @for (int i = 1; i <= 12; i++)
+                                {
+                                    <option>@i.ToString("00")</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Expire Year</label>
+                            <select class="form-select form-select-lg" ng-model="creditCard.expireYear">
+                                @for (int i = DateTime.Today.Year; i <= DateTime.Today.AddYears(10).Year; i++)
+                                {
+                                    <option>@(new DateTime(i,1,1).ToString("yy"))</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-12">
+                            <label class="form-label fw-semibold">CVC</label>
+                            <input class="form-control form-control-lg" ng-model="creditCard.cvc" placeholder="***" />
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <button class="btn btn-primary btn-lg w-100 d-flex justify-content-center align-items-center gap-2"
+                                    ng-click="pay()">
+
+                                <div class="spinner-border spinner-border-sm text-white"
+                                     role="status"
+                                     ng-show="status == 'progress'">
+                                </div>
+
+                                <span>Pay Securely</span>
+                            </button>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.8.3/angular.min.js" integrity="sha512-KZmyTq3PLx9EZl0RHShHQuXtrvdJ+m35tuOiwlcZfs/rE7NZv29ygNA8SFCkMXTnYZQK2OX0Gm2qKGfvWEtRXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var app = angular
+            .module('paymentApp', [])
+            .controller('ctrl', ($scope, $http) => {
+                $scope.selectedProvinceId = null;
+                $scope.selectedAddress = null;
+                $scope.cities = [];
+                $scope.userAddresses = [];
+                $scope.page = 'address';
+                $scope.address = {};
+                $scope.creditCard = {};
+
+                $scope.init = () => {
+                    $scope.fetchUserAddresses();
+                };
+
+                $scope.setAddress = (a) => {
+                    $scope.selectedAddress = a;
+                }
+
+                $scope.fetchCities = () => {
+                    $http
+                        .get(`/api/getcities/${$scope.selectedProvinceId}`)
+                        .then((response) => {
+                            $scope.cities = response.data;
+                        });
+                };
+
+                $scope.fetchUserAddresses = () => {
+                    $http
+                        .get(`/account/UserAddresses/`)
+                        .then((response) => {
+                            $scope.userAddresses = response.data;
+                        });
+                };
+
+                $scope.saveAddress = () => {
+                    $http
+                        .post('/account/createaddress', $scope.address)
+                        .then((response) => {
+                            $scope.fetchUserAddresses();
+                            $scope.address = {};
+                            $scope.selectedProvinceId = null;
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thank you!',
+                                html: 'Your address created successfully!'
+                            });
+                        });
+                };
+
+                $scope.pay = () => {
+                    $scope.status = 'progress';
+                    $scope.creditCard.shippingAddressId = $scope.selectedAddress.id;
+                    $http
+                        .post('/account/pay', $scope.creditCard)
+                        .then((response) => {
+                            $scope.status = 'idle';
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Thank you!',
+                                html: 'Your order has been placed successfully!'
+
+                            })
+                                .then((result) => {
+                                    window.location = '/';
+                                });
+                        });
+                }
+
+            });
+    </script>
+}

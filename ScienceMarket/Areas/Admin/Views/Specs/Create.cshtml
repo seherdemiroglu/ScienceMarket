@@ -1,12 +1,12 @@
 ﻿@model Specification
 @inject ScienceMarketDbContext dbContext
 @{
-    ViewData["Title"] = "Özellik Ekle";
+    ViewData["Title"] = "Add Specification";
     var categories = new SelectList(dbContext.Categories.OrderBy(p => p.Name).ToList(), "Id", "Name");
 }
 
 <form method="post" enctype="multipart/form-data" class="p-4 shadow rounded bg-dark">
-    <h4 class="mb-3">Özellik Ekle</h4>
+    <h4 class="mb-3">Add Specification</h4>
     <hr />
 
     <div class="mb-3">
@@ -17,16 +17,16 @@
         <span class="text-danger" asp-validation-for="CategoryId"></span>
     </div>
 
-    <!-- Ad -->
+
     <div class="mb-3">
         <label asp-for="Name" class="form-label fw-bold"></label>
-        <input asp-for="Name" class="form-control" placeholder="Özellik adını giriniz" />
+        <input asp-for="Name" class="form-control" placeholder="Enter the Specification name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
 
 
-    <!-- Aktif mi -->
+
     <div class="form-check form-switch mb-3">
         <input asp-for="IsEnabled" class="form-check-input" type="checkbox" role="switch" />
         <label asp-for="IsEnabled" class="form-check-label"></label>
@@ -34,11 +34,10 @@
 
 
 
-    <!-- Kaydet Butonu -->
     <div class="d-flex justify-content-end">
-        <a class="btn btn-link" asp-action="Index">İptal</a>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
         <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save me-1"></i> Kaydet
+            <i class="bi bi-save me-1"></i> Save
         </button>
     </div>
 </form>

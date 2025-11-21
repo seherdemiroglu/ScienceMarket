@@ -1,25 +1,25 @@
 ﻿@model List<Product>
 @{
-    ViewData["Title"] = "Ürün";
+    ViewData["Title"] = "Products";
 }
 
 
 <div class="container py-4 bg-dark text-light rounded shadow">
 
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-info mb-0">Ürünler</h3>
+        <h3 class="text-info mb-0">Products</h3>
         <a asp-controller="Products" asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i> Yeni Ürün Ekle
+            <i class="bi bi-plus-circle me-1"></i> Add New Product
         </a>
     </div>
 
     <table class="table table-dark table-hover align-middle">
         <thead class="table-secondary text-dark">
             <tr>
-                <th>Foto</th>
-                <th>Ad</th>
-                <th>Aktif</th>
-                <th class="text-center">İşlemler</th>
+                <th>Image</th>
+                <th>Name</th>
+                <th>Aktve</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -43,10 +43,10 @@
                     <td>
                         <div class="d-flex justify-content-center">
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning mr-2">
-                                Düzenle
+                                Edit
                             </a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" onclick="return confirm('Bu kataloğu silmek istediğinize emin misiniz?');">
-                                Sil
+                                Delete
                             </a>
                         </div>
 

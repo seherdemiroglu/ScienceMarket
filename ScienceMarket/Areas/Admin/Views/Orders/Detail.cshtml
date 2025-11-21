@@ -1,0 +1,95 @@
+﻿@model Order
+@{
+    ViewData["Title"] = "Order Detail";
+}
+
+<div class="card mb-4">
+    <div class="card-body">
+
+        <div class="mb-2">
+            <b>Date:</b> @Model.Date.ToShortDateString()
+        </div>
+
+        <div class="mb-2">
+            <b>User Name:</b> @Model.User!.GivenName
+        </div>
+
+        <div class="mb-2">
+            <b>User E-mail:</b> @Model.User!.Email
+        </div>
+
+        <div class="mb-2">
+            <b>Amount:</b> <span class="text-success fw-bold">@Model.GrandTotal.ToString("n2")</span>
+        </div>
+
+        <div class="mb-2">
+            <b>Status:</b>
+            @switch (Model.Status)
+            {
+                case OrderStatus.New:
+                    <span class="badge bg-primary">New</span>
+                    break;
+                case OrderStatus.InProgress:
+                    <span class="badge bg-warning text-dark">In Progress</span>
+                    break;
+                case OrderStatus.Shipped:
+                    <span class="badge bg-success">Shipped</span>
+                    break;
+                case OrderStatus.Cancelled:
+                    <span class="badge bg-danger">Cancelled</span>
+                    break;
+            }
+        </div>
+
+    </div>
+</div>
+
+<table class="table table-striped table-bordered align-middle">
+    <thead class="table-light">
+        <tr>
+            <th>İmage</th>
+            <th>Name</th>
+            <th>List Price</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Items)
+        {
+            <tr>
+                <td>
+                    <img src="@Url.Action("Product","Images", new { area = "", item.Product!.Id })"
+                         alt="" class="img-fluid rounded" style="height:80px;" />
+                </td>
+                <td>@item.Product.Name</td>
+                <td>@item.Product.Price.ToString("n2")</td>
+                <td>@item.Price.ToString("n2")</td>
+                <td>@item.Quantity</td>
+                <td class="fw-bold">@item.Amount.ToString("n2")</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<div class="py-3 border rounded d-flex">
+    @switch (Model.Status)
+    {
+        case OrderStatus.New:
+            <a asp-action="ToInProgress" asp-route-id="@Model.Id"
+               class="btn btn-primary ms-auto">Hazırlanıyor</a>
+            break;
+
+        case OrderStatus.InProgress:
+            <a asp-action="ToShipped" asp-route-id="@Model.Id"
+               class="btn btn-primary ms-auto">Gönderildi</a>
+            break;
+
+        case OrderStatus.Shipped:
+            break;
+
+        case OrderStatus.Cancelled:
+            break;
+    }
+</div>

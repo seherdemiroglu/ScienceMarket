@@ -1,28 +1,27 @@
 ﻿
 @model ScienceMarketData.Brand
 @{
-    ViewData["Title"] = "Marka Düzenle";
+    ViewData["Title"] = "Edit Brand";
 }
 
 
 <form method="post" enctype="multipart/form-data" class="p-4 shadow rounded bg-dark">
-    <h4 class="mb-3">Marka Düzenle</h4>
+    <h4 class="mb-3">Edit Brand</h4>
     <hr />
 
-    <!-- Ad -->
+  
     <div class="mb-3">
         <label asp-for="Name" class="form-label fw-bold"></label>
-        <input asp-for="Name" class="form-control" placeholder="Marka adını giriniz" />
+        <input asp-for="Name" class="form-control" placeholder="Enter the brand name" />
         <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
-        <label asp-for="LogoFile" class="form-label fw-bold">Dosya Seçiniz</label>
+        <label asp-for="LogoFile" class="form-label fw-bold">Select File</label>
         <input type="file" asp-for="LogoFile" class="form-control" />
 
     </div>
 
-    <!-- Aktif mi -->
     <div class="form-check form-switch mb-3">
         <input asp-for="IsEnabled" class="form-check-input" type="checkbox" role="switch" />
         <label asp-for="IsEnabled" class="form-check-label"></label>
@@ -30,11 +29,10 @@
 
 
 
-    <!-- Kaydet Butonu -->
     <div class="d-flex justify-content-end">
-        <a class="btn btn-link" asp-action="Index">İptal</a>
+        <a class="btn btn-link" asp-action="Index">Cancel</a>
         <button type="submit" class="btn btn-primary">
-            <i class="bi bi-save me-1"></i> Kaydet
+            <i class="bi bi-save me-1"></i> Save
         </button>
     </div>
 </form>

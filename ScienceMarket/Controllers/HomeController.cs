@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using ScienceMarketData;
 using Microsoft.EntityFrameworkCore;
+using System.Text.RegularExpressions;
 
 
 namespace ScienceMarket.Controllers;
@@ -36,6 +37,54 @@ public class HomeController (ScienceMarketDbContext dbContext): Controller
             .SingleOrDefaultAsync(p => p.Id == id);
         return View(model);
     }
+
+    //public async Task<IActionResult> Search(string keyword)
+    //{
+    //    var keywords = Regex.Split(keyword, @"\s+");
+    //    var model = (await dbContext.Products
+    //        .Include(p => p.Category)
+    //        .Include(p => p.Brand)
+    //        .ToListAsync())
+    //        .Where(p => keyword.Any(q => p.Name!.Contains(q))).ToList();
+    //        //.Select(p => new ProductTileViewModel
+    //        //{
+    //        //    BrandId = p.BrandId,
+    //        //    BrandName = p.Brand?.Name,
+    //        //    CategoryId = p.CategoryId,
+    //        //    CategoryName = p.Category?.Name,
+    //        //    Name = p.Name,
+    //        //    Id = p.Id,
+    //        //    Price = p.Price
+    //        //});
+    //    return View(model);
+    //}
+
+    public async Task<IActionResult> Search(string keyword)
+    {
+        if (string.IsNullOrWhiteSpace(keyword))
+        {
+            return View(new List<Product>());
+        }
+
+        var keywords = Regex.Split(keyword, @"\s+");
+
+     
+        var query = dbContext.Products
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .AsQueryable();
+
+  
+        foreach (var key in keywords)
+        {
+            query = query.Where(p => p.Name!.Contains(key));
+        }
+
+        var model = await query.ToListAsync();
+
+        return View(model); 
+    }
+
     public async Task<IActionResult> ProductDetail(Guid id)
     {
         var model = await dbContext

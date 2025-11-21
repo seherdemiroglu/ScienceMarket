@@ -1,14 +1,14 @@
 ﻿
 @{
-    ViewData["Title"] = "Markalar";
+    ViewData["Title"] = "Brands";
 }
 @model List<Brand>
 
 <div class="container py-4 bg-dark text-light rounded shadow">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h3 class="text-info mb-0">Markalar</h3>
+        <h3 class="text-info mb-0">Brands</h3>
         <a asp-controller="Brands" asp-action="Create" class="btn btn-success">
-            <i class="bi bi-plus-circle me-1"></i> Yeni Marka Ekle
+            <i class="bi bi-plus-circle me-1"></i> Add New Brand
         </a>
     </div>
 
@@ -16,12 +16,12 @@
         <thead class="table-secondary text-dark">
             <tr>
                 <th>Logo</th>
-                <th>Ad</th>
-                <th>Aktif</th>
+                <th>Name</th>
+                <th>Aktive</th>
 
 
 
-                <th class="text-center">İşlemler</th>
+                <th class="text-center">Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -38,18 +38,18 @@
                         <td>
                             @if (item.IsEnabled)
                             {
-                                <span class="badge bg-success">Aktif</span>
+                                <span class="badge bg-success">Aktive</span>
                             }
                             else
                             {
-                                <span class="badge bg-danger">Pasif</span>
+                                <span class="badge bg-danger">Pasive</span>
                             }
                         </td>
                         <td>
                             <div class="d-flex justify-content-center gap-2">
-                                <a asp-controller="Brands" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning mr-2">Düzenle</a>
+                                <a asp-controller="Brands" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-warning mr-2">Edit</a>
                                 @*program.cs deki ""pattern: "{area:exists}/{controller=Dashboard}/{action=Index}/{id?}");"" rotadaki id kısmına gönderdiğimiz id eklenecek*@
-                                <a asp-controller="Brands" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" onclick="return confirm('Bu kataloğu silmek istediğinize emin misiniz?');">Sil</a>
+                                <a asp-controller="Brands" asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger" onclick="return confirm('Bu kataloğu silmek istediğinize emin misiniz?');">Delete</a>
                             </div>
                         </td>
                     </tr>
@@ -59,7 +59,7 @@
             else
             {
                 <tr>
-                    <td colspan="7" class="text-center text-muted">Hiç katalog bulunamadı.</td>
+                    <td colspan="7" class="text-center text-muted">No catalog found.</td>
                 </tr>
             }
         </tbody>

@@ -98,7 +98,7 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "Product",
     pattern: "{name}-product-{id}",
-    defaults: new { controller = "Home", action = "Detail" }
+    defaults: new { controller = "Home", action = "ProductDetail" }
     );
 
 app.MapControllerRoute(

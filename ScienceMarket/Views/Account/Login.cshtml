@@ -27,32 +27,32 @@
                                 <form asp-action="Login" asp-controller="Account" method="post">
                                     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
-                                    <!-- E-Posta -->
+                                  
                                     <div class="mb-3">
                                         <label asp-for="UserName" class="form-label"></label>
                                         <input asp-for="UserName" class="form-control" placeholder="ornek@eposta.com" />
                                         <span asp-validation-for="UserName" class="text-danger"></span>
                                     </div>
 
-                                    <!-- Parola -->
+                                  
                                     <div class="mb-3">
                                         <label asp-for="Password" class="form-label"></label>
                                         <input asp-for="Password" class="form-control" placeholder="Parolanız" />
                                         <span asp-validation-for="Password" class="text-danger"></span>
                                     </div>
 
-                                    <!-- Oturum Açık Kalsın -->
+                               
                                     <div class="form-check mb-3">
                                         <input asp-for="IsPersistent" class="form-check-input" />
                                         <label asp-for="IsPersistent" class="form-check-label"></label>
                                     </div>
 
-                                    <!-- Giriş Butonu -->
+                                   
                                     <div class="d-grid mb-3">
                                         <button type="submit" class="btn btn-warning">Giriş Yap</button>
                                     </div>
 
-                                    <!-- Şifremi Unuttum -->
+                                 
                                     <div class="text-center">
                                         <small>
                                             <a asp-action="ForgotPassword" asp-controller="Account" class="text-decoration-none">Şifremi unuttum</a>

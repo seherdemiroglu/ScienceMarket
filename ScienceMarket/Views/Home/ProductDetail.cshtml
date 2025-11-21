@@ -7,7 +7,7 @@
 
     var avg = 0.0;
 
-    // Image list creation
+
     List<string> images = new List<string>();
     images.Add(Url.Action("Product", "Images", new { id = Model.Id }));
     images.AddRange(Model.ProductImages.Select(p =>
@@ -19,13 +19,11 @@
 
     <div class="row">
 
-        <!-- LEFT: IMAGES -->
         <div class="col-md-5">
 
-            <!-- Main Image -->
             <img src="@images.First()" class="img-fluid rounded shadow mb-3" />
 
-            <!-- Carousel for additional images -->
+        
             @if (images.Count > 1)
             {
                 <div id="productCarousel" class="carousel slide" data-ride="carousel">
@@ -54,7 +52,7 @@
 
 
 
-        <!-- RIGHT: PRODUCT INFO -->
+       
         <div class="col-md-7">
 
             <h2 class="fw-bold">@Model.Name</h2>
@@ -76,7 +74,6 @@
             </button>
 
 
-            <!-- SPECIFICATIONS TABLE -->
             <h4 class="mt-4">Specifications</h4>
 
             @if (Model.Specs != null && Model.Specs.Any())
