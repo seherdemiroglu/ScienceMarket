@@ -13,24 +13,24 @@ namespace ScienceMarketData;
 
 public class Product : _EntityBase
 {
-    [Display(Name = "Kategori")]
-    [Required(ErrorMessage = "{0} alanı boş bırakılamaz")]
+    [Display(Name = "Category")]
+    [Required(ErrorMessage = "{0} field cannot be left blank")]
     public Guid CategoryId { get; set; }
 
-    [Display(Name = "Marka")]
+    [Display(Name = "Brand")]
     public Guid? BrandId { get; set; }
 
-    [Display(Name = "Ad")]
-    [Required(ErrorMessage = "{0} alanı boş bırakılamaz")]
+    [Display(Name = "Name")]
+    [Required(ErrorMessage = "{0} field cannot be left blank")]
     public string? Name { get; set; }
 
 
-    [Display(Name = "Özellikler")]
+    [Display(Name = "Description")]
     public string? Description { get; set; }
 
 
-    [Display(Name = "Fiyat")]
-    [Required(ErrorMessage = "{0} alanı boş bırakılamaz")]
+    [Display(Name = "Price")]
+    [Required(ErrorMessage = "{0} field cannot be left blank")]
     public decimal Price { get; set; }
     public byte[]? Image { get; set; }
     public int Views { get; set; }
@@ -43,7 +43,7 @@ public class Product : _EntityBase
     public IFormFile[]? ImageFiles { get; set; }
 
     [NotMapped]
-    [Display(Name = "Katalog")]
+    [Display(Name = "Catalog")]
     public Guid[]? SelectedCatalogs { get; set; }
 
     public Brand? Brand { get; set; }

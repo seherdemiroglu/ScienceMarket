@@ -8,11 +8,16 @@
     var avg = 0.0;
 
 
-    List<string> images = new List<string>();
+    //List<string> images = new List<string>();
+    //images.Add(Url.Action("Product", "Images", new { id = Model.Id }));
+    //images.AddRange(Model.ProductImages.Select(p =>
+    //    Url.Action("ProductImage", "Images", new { id = p.Id })
+    //));
+
+    var galleryImageCounter = 0;
+    List<string> images = [];
     images.Add(Url.Action("Product", "Images", new { id = Model.Id }));
-    images.AddRange(Model.ProductImages.Select(p =>
-        Url.Action("ProductImage", "Images", new { id = p.Id })
-    ));
+    images.AddRange(Model.ProductImages.Select(p => Url.Action("ProductImage", "Images", new { id = p.Id })));
 }
 
 <div class="container mt-4">
@@ -20,39 +25,61 @@
     <div class="row">
 
         <div class="col-md-5">
-
-            <img src="@images.First()" class="img-fluid rounded shadow mb-3" />
-
-        
-            @if (images.Count > 1)
-            {
-                <div id="productCarousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-
-                        @for (int i = 0; i < images.Count; i++)
-                        {
-                            <div class="carousel-item @(i == 0 ? "active" : "")">
-                                <img src="@images[i]" class="d-block w-100 rounded" />
-                            </div>
-                        }
-
-                    </div>
-
-                    <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon"></span>
-                    </a>
-
-                    <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon"></span>
-                    </a>
+            
+            <div id="carouselExample" class="carousel slide bg-dark">
+                <div class="carousel-inner">
+                    @foreach (var image in images)
+                    {
+                        <div class="carousel-item active">
+                            <img src="@image" class="d-block w-100" alt="...">
+                        </div>
+                    }
+                    
                 </div>
-            }
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExample" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExample" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+
+            @*<img src="@images.First()" class="img-fluid rounded shadow mb-3" />
+
+
+        @if (images.Count > 1)
+        {
+            <div id="productCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+
+                    @for (int i = 0; i < images.Count; i++)
+                    {
+                        <div class="carousel-item @(i == 0 ? "active" : "")">
+                            <img src="@images[i]" class="d-block w-100 rounded" />
+                        </div>
+                    }
+
+                </div>
+
+                <a class="carousel-control-prev" href="#productCarousel" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </a>
+
+                <a class="carousel-control-next" href="#productCarousel" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </a>
+            </div>
+        }*@
+
+
         </div>
 
 
 
 
-       
+
         <div class="col-md-7">
 
             <h2 class="fw-bold">@Model.Name</h2>
@@ -106,5 +133,7 @@
     </div>
 
 </div>
+
+
 
 

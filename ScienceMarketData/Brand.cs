@@ -13,8 +13,8 @@ namespace ScienceMarketData;
 
 public class Brand : _EntityBase
 {
-    [Display(Name = "Ad")]
-    [Required(ErrorMessage = "{0} alanı boş bırakılamaz")]
+    [Display(Name = "Name")]
+    [Required(ErrorMessage = "{0} field cannot be left blank")]
     public string? Name { get; set; }
 
     [Display(Name = "Logo")]

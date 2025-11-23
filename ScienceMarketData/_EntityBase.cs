@@ -14,7 +14,7 @@ public abstract class _EntityBase
     public Guid Id { get; set; }
     public DateTime CreatedAt { get; set; }
 
-    [Display(Name = "Aktif")]
+    [Display(Name = "Aktive")]
     public bool IsEnabled { get; set; } = true;
 
     public User? User { get; set; }

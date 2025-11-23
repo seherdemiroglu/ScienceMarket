@@ -2,7 +2,7 @@
 
 @inject ScienceMarketDbContext dbContext
 @{
-    ViewData["Title"] = "Add Prpduct";
+    ViewData["Title"] = "Add Product";
     var categories = dbContext.Categories.OrderBy(p => p.Name).ToList();
     var specs = dbContext.Specifications.OrderBy(p => p.Name).ToList();
     var categoySelectList = new SelectList(categories.Select(p => new { p.Id, p.Name }), "Id", "Name");
@@ -11,13 +11,13 @@
 }
 
 <form method="post" enctype="multipart/form-data" class="p-4 shadow rounded bg-dark">
-    <h4 class="mb-3">Add Prpduct</h4>
+    <h4 class="mb-3">Add Product</h4>
     <hr />
 
     <div class="mb-3">
         <label asp-for="CategoryId" class="form-label fw-bold"></label>
         <select asp-for="CategoryId" asp-items="categoySelectList" class="form-control">
-            <option selected disabled value="">Seçiniz</option>
+            <option selected disabled value="">Select</option>
         </select>
     </div>
 
@@ -72,7 +72,7 @@
     </div>
     <div class="mb-3">
         <label class="form-label" asp-for="Description"></label>
-        <textarea class="form-control" asp-for="Description" placeholder="enter the specifications..."></textarea>
+        <textarea class="form-control" asp-for="Description" placeholder="enter the description..."></textarea>
     </div>
     
     <div class="mb-3">
@@ -109,8 +109,8 @@
 </form>
 
 @section Scripts {
-    <link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>
+    @*<link href="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.9.0/dist/summernote.min.js"></script>*@
     <partial name="_ValidationScriptsPartial" />
 
     <script>

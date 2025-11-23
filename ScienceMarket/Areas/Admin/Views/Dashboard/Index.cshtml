@@ -85,9 +85,10 @@
         <div class="card p-3">
             <h6 class="mb-2">Quick Actions</h6>
             <div class="d-grid gap-2">
-                <a class="btn btn-warning" href="#">Add New Category</a>
-                <a class="btn btn-outline-light" href="#">Add New Catalog</a>
-                <a class="btn btn-outline-light" href="#">Add New Product</a>
+                <a class="btn btn-warning" asp-controller="Categories" asp-action="Create">Add New Category</a>
+                <a class="btn btn-outline-light" asp-controller="Catalogs" asp-action="Create">Add New Catalog</a>
+                <a class="btn btn-outline-light" asp-controller="Brands" asp-action="Create">Add New Brand</a>
+                <a class="btn btn-outline-light" asp-controller="Products" asp-action="Create">Add New Product</a>
             </div>
         </div>
     </div>
